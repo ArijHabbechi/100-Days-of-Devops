@@ -6,7 +6,7 @@ Create a Linux User with a non-interactive shell
 
 ---
 
-###  Solution  
+###  Solution  :
 
 Logged into the target server using SSH:  
 ```bash
