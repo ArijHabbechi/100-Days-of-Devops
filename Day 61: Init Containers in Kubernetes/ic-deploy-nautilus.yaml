@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-deploy-nautilus
+  labels:
+    app: ic-nautilus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ic-nautilus
+  template:
+    metadata:
+      labels:
+        app: ic-nautilus
+    spec:
+      initContainers: 
+        - name: ic-msg-nautilus
+          image: fedora:latest
+          command: ['bin/bash', '-c', 'echo Init Done - Welcome to xFusionCorp Industries > /ic/ecommerce']
+          volumeMounts:
+            - name: ic-volume-nautilus
+              mountPath: /ic
+      containers:
+        - name: ic-main-nautilus
+          image: fedora:latest
+          command: ['bin/bash', '-c', 'while true; do cat /ic/ecommerce; sleep 5; done']
+          volumeMounts:
+            - name: ic-volume-nautilus
+              mountPath: /ic
+      volumes:
+        - name: ic-volume-nautilus
+          emptyDir: {}
