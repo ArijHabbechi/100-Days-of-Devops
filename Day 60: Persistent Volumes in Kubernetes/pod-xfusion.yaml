@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-xfusion
+  labels:
+    app: web-xfusion
+spec:
+  containers:
+    - name: container-xfusion
+      image: httpd:latest
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: web-content
+  volumes:
+    - name: web-content
+      persistentVolumeClaim:
+        claimName: pvc-xfusion
