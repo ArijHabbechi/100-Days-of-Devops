@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iron-db-deployment-nautilus
+  namespace: iron-namespace-nautilus
+  labels:
+    db: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mariadb
+  template:
+    metadata:
+      labels:
+        db: mariadb
+    spec:
+      containers:
+        - name: iron-db-container-nautilus
+          image: kodekloud/irondb:2.0
+          env:
+            - name: MYSQL_DATABASE
+              value: database_host
+            - name: MYSQL_ROOT_PASSWORD
+              value: "R00t@123!"
+            - name: MYSQL_USER
+              value: ironuser
+            - name: MYSQL_PASSWORD
+              value: "P@ssw0rd#2025"
+          volumeMounts:
+            - name: db
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: db
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iron-db-service-nautilus
+  namespace: iron-namespace-nautilus
+  labels:
+    db: mariadb
+spec:
+  selector:
+    db: mariadb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
