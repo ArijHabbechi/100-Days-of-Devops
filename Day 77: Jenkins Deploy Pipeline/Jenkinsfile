@@ -1,0 +1,11 @@
+pipeline {
+    agent { label 'ststor01' }
+    stages {
+        stage('Deploy') {
+            steps {
+                git url: 'https://80-port-5oh6jstvqhzxnafw.labs.kodekloud.com/sarah/web_app'
+                sh 'cp -r index.html /var/www/html/'
+            }
+        }
+    }
+}
