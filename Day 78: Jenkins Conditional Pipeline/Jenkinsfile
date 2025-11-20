@@ -1,0 +1,12 @@
+node('ststor01') {
+    stage('Deploy') {
+        def branchName = params.BRANCH?.trim()
+        sh """
+            set -e
+            cd /var/www/html
+            git fetch origin
+            git checkout -f ${branchName} || git checkout -b ${branchName} origin/${branchName}
+            git reset --hard origin/${branchName}
+        """
+    }
+}
