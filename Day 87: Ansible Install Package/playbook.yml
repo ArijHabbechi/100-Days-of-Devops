@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install a httpd
+      yum:
+        name: httpd
+        state: present # Ensures the package is installed
