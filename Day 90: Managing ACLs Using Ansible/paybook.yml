@@ -1,0 +1,58 @@
+---
+- name: File Creation and ACL tasks on all app servers
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure /opt/devops directory exists
+      ansible.builtin.file:
+        path: /opt/devops
+        state: directory
+        mode: '0755'
+
+    - name: Create blog.txt on stapp01
+      ansible.builtin.file:
+        path: /opt/devops/blog.txt
+        state: touch
+      when: inventory_hostname == "stapp01"
+
+    - name: Set ACL r for group tony on blog.txt (stapp01)
+      ansible.posix.acl:
+        path: /opt/devops/blog.txt
+        entity: tony
+        etype: group
+        permissions: r
+        state: present
+      when: inventory_hostname == "stapp01"
+
+
+    - name: Create story.txt on stapp02
+      ansible.builtin.file:
+        path: /opt/devops/story.txt
+        state: touch
+      when: inventory_hostname == "stapp02"
+
+    - name: Set ACL rw for user steve on story.txt (stapp02)
+      ansible.posix.acl:
+        path: /opt/devops/story.txt
+        entity: steve
+        etype: user
+        permissions: rw
+        state: present
+      when: inventory_hostname == "stapp02"
+
+
+    - name: Create media.txt on stapp03
+      ansible.builtin.file:
+        path: /opt/devops/media.txt
+        state: touch
+      when: inventory_hostname == "stapp03"
+
+    - name: Set ACL rw for group banner on media.txt (stapp03)
+      ansible.posix.acl:
+        path: /opt/devops/media.txt
+        entity: banner
+        etype: group
+        permissions: rw
+        state: present
+      when: inventory_hostname == "stapp03"
